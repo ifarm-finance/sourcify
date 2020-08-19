@@ -42,9 +42,7 @@ export default class VerificationController extends BaseController implements IC
             inputData.files = await this.verificationService.organizeFilesForSubmision(req.files!);
             const matches: any = [];
             matches.push(await this.verificationService.inject(inputData));
-            const promises: Promise<Match>[] = [];
-            promises.push(matches);
-            Promise.all(promises).then((result) => {
+            Promise.all(matches).then((result) => {
                 res.status(200).send({ result })
             }).catch()
         }
@@ -54,7 +52,7 @@ export default class VerificationController extends BaseController implements IC
     checkByAddresses = async (req: any, res: Response) => {
         let resultArray: Array<Object> = [];
         const map: Map<string, Object> = new Map();
-        for(const address of req.query.addresses.split(',')) {
+        for (const address of req.query.addresses.split(',')) {
             for (const chainId of req.query.chainIds.split(',')) {
 
                 const object: any = await this.verificationService.findByAddress(address, chainId, config.repository.path);
